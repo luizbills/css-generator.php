@@ -15,7 +15,8 @@ write this:
 $css = new CSS_Generator();
 
 for ($i = 1; $i <= 4; $i++) {
-	$css->add_rule( '.a-' . $i, array(
+	// single selector
+	$css->add_rule( '.color-' . $i, array(
 		'color' => 'rgb(200, 200,' . ($i * 20) . ')',
 	) );
 }
@@ -34,16 +35,16 @@ $css->close_media();
 
 to output this:
 ```css
-.a-1{
+.color-1{
 	color:rgb(200, 200,20);
 }
-.a-2{
+.color-2{
 	color:rgb(200, 200,40);
 }
-.a-3{
+.color-3{
 	color:rgb(200, 200,60);
 }
-.a-4{
+.color-4{
 	color:rgb(200, 200,80);
 }
 @media screen and (min-width: 30em){
@@ -56,7 +57,7 @@ to output this:
 
 ```
 
-If you pass a `true` on constructor, the css generated will be minified. Example:
+If you pass a `true` on constructor, the generated css will be minified. Example:
 ```php
 $css = new CSS_Generator(true);
 
