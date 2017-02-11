@@ -12,8 +12,6 @@ include_once 'path/to/lib/class-css-generator.php';
 
 write this:
 ```php
-<?php
-
 $css = new CSS_Generator();
 
 for ($i = 1; $i <= 4; $i++) {
@@ -60,7 +58,6 @@ to output this:
 
 If you pass a `true` on constructor, the css generated will be minified. Example:
 ```php
-<?php
 $css = new CSS_Generator(true);
 
 $css->open_media('screen and (min-width: 30em)');
