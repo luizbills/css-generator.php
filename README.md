@@ -5,7 +5,7 @@ Write css programatically using PHP.
 ## Install
 
 ```php
-include_once 'path/to/lib/class-css-generator.php';
+include_once 'path/to/class-css-generator.php';
 ```
 
 ## Usage
