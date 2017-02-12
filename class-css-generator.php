@@ -3,7 +3,7 @@
  * CSS Generator
  * Write css programatically using PHP.
  *
- * @version 1.1.1
+ * @version 1.1.2
  * @author Agência Zoop <hello@agenciazoop.com>
  * @copyright 2017 Agência Zoop
  * @license MIT
@@ -28,7 +28,7 @@ class CSS_Generator {
 	}
 
 	public function add_rule ( $selectors, $declarations_array ) {
-		$declarations = array();
+		$declarations = [];
 		$selector_indentation = '';
 		$declaration_indentation = '';
 
@@ -38,7 +38,7 @@ class CSS_Generator {
 		}
 
 		if ( ! is_array( $selectors ) ) {
-			$selectors = array( $selectors );
+			$selectors = [ $selectors ];
 		}
 
 		foreach ( $selectors as $key => $value ) {
