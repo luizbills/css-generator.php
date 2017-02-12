@@ -10,16 +10,13 @@ include_once 'path/to/class-css-generator.php';
 
 ## Usage
 
-write this:
 ```php
 $css = new CSS_Generator();
 
-for ($i = 1; $i <= 4; $i++) {
-	// single selector
-	$css->add_rule( '.color-' . $i, array(
-		'color' => 'rgb(200, 200,' . ($i * 20) . ')',
-	) );
-}
+// single selector
+$css->add_rule( '.color-white', array(
+	'color' => '#fff',
+) );
 
 $css->open_media('screen and (min-width: 30em)');
 
@@ -30,22 +27,18 @@ $css->add_rule( array( 'html', 'body' ), array(
 	)
 );
 
+// `close_media` method is optional in some situations.
+// It is called automatically before `open_media` and `get_output`.
 $css->close_media();
+
+// write your css
+file_puts_content( 'path/to/file.css', $css->get_output() );
 ```
 
-to output this:
+content of `file.css`:
 ```css
-.color-1{
-	color:rgb(200, 200,20);
-}
-.color-2{
-	color:rgb(200, 200,40);
-}
-.color-3{
-	color:rgb(200, 200,60);
-}
-.color-4{
-	color:rgb(200, 200,80);
+.color-white{
+	color:#fff;
 }
 @media screen and (min-width: 30em){
 	html,
