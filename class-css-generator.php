@@ -3,7 +3,7 @@
  * CSS Generator
  * Write css programatically using PHP.
  *
- * @version 1.1.0
+ * @version 1.1.1
  * @author Agência Zoop <hello@agenciazoop.com>
  * @copyright 2017 Agência Zoop
  * @license MIT
@@ -19,9 +19,7 @@ class CSS_Generator {
 	}
 
 	public function get_output ( $close_media = true ) {
-		if ( $this->media_is_open ) {
-			$this->close_media();
-		}
+		$this->close_media();
 		return $this->output;
 	}
 
@@ -57,9 +55,7 @@ class CSS_Generator {
 	}
 
 	public function open_media ( $breakpoint ) {
-		if ( $this->media_is_open ) {
-			$this->close_media();
-		}
+		$this->close_media();
 		$this->media_is_open = true;
 		$this->output .= '@media ' . trim( $breakpoint ) . '{' . $this->linebreak;
 	}
