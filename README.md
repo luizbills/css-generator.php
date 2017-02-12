@@ -75,5 +75,17 @@ outputs:
 @media screen and (min-width: 30em){html,body{background-color:black;color:white;}}
 ```
 
+There is also a method `add_raw` to add any string to your css.
+```php
+$css = new CSS_Generator();
+
+$css->add_raw('/* my comment */ a { text-decoration: none }');
+```
+
+outputs:
+```css
+/* my comment */ a { text-decoration: none }
+```
+
 ## License
 MIT License &copy; 2017 Agência Zoop
