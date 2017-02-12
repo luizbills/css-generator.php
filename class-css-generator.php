@@ -1,12 +1,12 @@
 <?php
 /**
-CSS Generator
-Write css programatically using PHP.
-
-@version 1.1.0
-@author Agência Zoop <hello@agenciazoop.com>
-@copyright 2017 Agência Zoop
-@license MIT
+ * CSS Generator
+ * Write css programatically using PHP.
+ *
+ * @version 1.1.0
+ * @author Agência Zoop <hello@agenciazoop.com>
+ * @copyright 2017 Agência Zoop
+ * @license MIT
 */
 class CSS_Generator {
 
