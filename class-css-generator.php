@@ -1,5 +1,13 @@
 <?php
+/**
+CSS Generator
+Write css programatically using PHP.
 
+@version 1.1.0
+@author Agência Zoop <hello@agenciazoop.com>
+@copyright 2017 Agência Zoop
+@license MIT
+*/
 class CSS_Generator {
 
 	private $output = '';
@@ -36,11 +44,11 @@ class CSS_Generator {
 		}
 
 		foreach ( $selectors as $key => $value ) {
-			$selectors[ $key ] = $selector_indentation . $value;
+			$selectors[ $key ] = $selector_indentation . trim( $value );
 		}
 
 		foreach ( $declarations_array as $key => $value ) {
-			$declarations[] = $declaration_indentation . $key . ':' . $value . ';' . $this->linebreak;
+			$declarations[] = $declaration_indentation . trim( $key ) . ':' . trim( $value ) . ';' . $this->linebreak;
 		}
 
 		$this->output .= implode( ',' . $this->linebreak, $selectors ) . '{' . $this->linebreak
@@ -53,7 +61,7 @@ class CSS_Generator {
 			$this->close_media();
 		}
 		$this->media_is_open = true;
-		$this->output .= '@media ' . $breakpoint . '{' . $this->linebreak;
+		$this->output .= '@media ' . trim( $breakpoint ) . '{' . $this->linebreak;
 	}
 
 	public function close_media () {
