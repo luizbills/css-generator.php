@@ -10,12 +10,16 @@
 */
 class CSS_Generator {
 
-	private $output = '';
-	private $linebreak = null;
+	protected $output = '';
+	protected $linebreak = '';
+	protected $indentation = null;
 	private $media_is_open = false;
 
-	public function __construct ( $compact = false ) {
-		$this->linebreak = ! $compact ? PHP_EOL : '';
+	public function __construct ( $compact = false, $indentation = "\t" ) {
+		if ( ! $compact ) {
+			$this->linebreak = PHP_EOL;
+			$this->indentation = $indentation;
+		}
 	}
 
 	public function get_output ( $close_media = true ) {
@@ -33,8 +37,8 @@ class CSS_Generator {
 		$declaration_indentation = '';
 
 		if ( ! empty( $this->linebreak ) ) {
-			$selector_indentation = $this->media_is_open ? "\t" : '';
-			$declaration_indentation = $this->media_is_open ? "\t\t" : "\t";
+			$selector_indentation = $this->media_is_open ? $this->indentation : '';
+			$declaration_indentation = $this->media_is_open ? str_repeat( $this->indentation, 2 ) : $this->indentation;
 		}
 
 		if ( ! is_array( $selectors ) ) {
