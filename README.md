@@ -72,4 +72,4 @@ output:
 ```
 
 ## License
-MIT License &copy; 2017 Agência Zoop
+MIT License &copy; 2018 Luiz Bills
