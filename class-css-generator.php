@@ -3,28 +3,45 @@
  * CSS Generator
  * Write css programatically using PHP.
  *
- * @version 1.3.1
- * @author Agência Zoop <hello@agenciazoop.com>
- * @copyright 2017 Agência Zoop
+ * @version 2.0.0
+ * @author Luiz Bills <luizpbills@gmail.comm>
+ * @copyright 2018 Luiz Bills
  * @license MIT
 */
+require __DIR__ . '/vendor/autoload.php';
+
+use MatthiasMullie\Minify;
+
 class CSS_Generator {
 
 	protected $output = '';
 	protected $linebreak = '';
 	protected $indentation = null;
-	private $media_is_open = false;
+	protected $media_is_open = false;
 
-	public function __construct ( $compact = false, $indentation = "\t" ) {
-		if ( ! $compact ) {
-			$this->linebreak = PHP_EOL;
-			$this->indentation = $indentation;
-		}
+	protected $settings = null;
+	protected $default_settings = [
+		'indentation'  => "\t",
+		'linebreak'    => PHP_EOL,
+	];
+
+	public function __construct ( $settings = [] ) {
+		$this->settings = array_merge( $this->default_settings, $settings );
 	}
 
-	public function get_output () {
+	public function get_output ( $compress = false ) {
 		$this->close_media();
+
+		if ( $compress ) {
+			$this->minify();
+		}
+
 		return $this->output;
+	}
+
+	protected function minify () {
+		$minifier = new Minify\CSS( $this->output );
+		$this->output = $minifier->minify();
 	}
 
 	public function add_raw ( $string ) {
@@ -35,10 +52,12 @@ class CSS_Generator {
 		$declarations = [];
 		$selector_indentation = '';
 		$declaration_indentation = '';
+		$linebreak = $this->settings['indentation'];
+		$indentation = $this->settings['linebreak'];
 
-		if ( ! empty( $this->linebreak ) ) {
-			$selector_indentation = $this->media_is_open ? $this->indentation : '';
-			$declaration_indentation = $this->media_is_open ? str_repeat( $this->indentation, 2 ) : $this->indentation;
+		if ( ! empty( $linebreak ) ) {
+			$selector_indentation = $this->media_is_open ? $indentation : '';
+			$declaration_indentation = $this->media_is_open ? str_repeat( $indentation, 2 ) : $indentation;
 		}
 
 		if ( ! is_array( $selectors ) ) {
@@ -50,27 +69,27 @@ class CSS_Generator {
 		}
 
 		foreach ( $declarations_array as $key => $value ) {
-			$declarations[] = $declaration_indentation . trim( $key ) . ':' . trim( $value ) . ';' . $this->linebreak;
+			$declarations[] = $declaration_indentation . trim( $key ) . ':' . trim( $value ) . ';' . $linebreak;
 		}
 
-		$this->output .= implode( ',' . $this->linebreak, $selectors ) . '{' . $this->linebreak
+		$this->output .= implode( ',' . $linebreak, $selectors ) . '{' . $linebreak
 			. implode( false, $declarations )
-			. $selector_indentation . '}' . $this->linebreak;
+			. $selector_indentation . '}' . $linebreak;
 	}
 
 	public function open_media ( $breakpoint ) {
 		$this->close_media();
 		$this->media_is_open = true;
-		$this->output .= '@media ' . trim( $breakpoint ) . '{' . $this->linebreak;
+		$this->output .= '@media ' . trim( $breakpoint ) . '{' . $this->settings['linebreak'];
 	}
 
 	public function close_media () {
 		if ( $this->media_is_open ) {
 			$this->media_is_open = false;
-			$this->output .= '}' . $this->linebreak;
+			$this->output .= '}' . $this->settings['linebreak'];
 		}
 	}
-	
+
 	public function reset () {
 		$this->output = '';
 	}
