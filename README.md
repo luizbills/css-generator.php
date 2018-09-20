@@ -5,12 +5,14 @@ Write css programatically using PHP.
 ## Install
 
 ```php
-require_once 'path/to/class-css-generator.php';
+composer require luizbills/css-generator
 ```
 
 ## Usage
 
 ```php
+use luizbills\CSS_Generator\Generator as CSS_Generator;
+
 $options = [
     // default values
     // 'indentation' => '    ', // 4 spaces
