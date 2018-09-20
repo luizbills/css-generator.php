@@ -9,17 +9,15 @@
  * @license MIT
 */
 require __DIR__ . '/vendor/autoload.php';
-
 use MatthiasMullie\Minify;
 
 class CSS_Generator {
-
 	protected $raw = '';
 	protected $block_level = 0;
 	protected $linebreak = "\n";
 	protected $options = null;
 	protected $default_options = [
-		'indentation'  => "    ", // 4 spaces
+		'indentation'  => '    ', // 4 spaces
 	];
 
 	public function __construct ( $options = [] ) {
@@ -47,9 +45,8 @@ class CSS_Generator {
 
 	public function add_rule ( $selectors, $declarations_array ) {
 		$declarations = [];
-		$indentation = $this->options['indentation'];
-		$selector_indentation = str_repeat( $indentation, $this->block_level );
-		$declaration_indentation = str_repeat( $indentation, $this->block_level + 1 );
+		$selector_indentation = str_repeat( $this->options['indentation'], $this->block_level );
+		$declaration_indentation = str_repeat( $this->options['indentation'], $this->block_level + 1 );
 		
 		if ( ! is_array( $selectors ) ) {
 			$selectors = [ $selectors ];
@@ -69,14 +66,16 @@ class CSS_Generator {
 	}
 
 	public function open_block ( $type, $props = '' ) {
-		$this->raw .= '@' . "$type " . trim( $props ) . ' {' . $this->linebreak;
+		$block_indentation = str_repeat( $this->options['indentation'], $this->block_level );
+		$this->raw .= $block_indentation . '@' . $type . ' ' . trim( $props ) . ' {' . $this->linebreak;
 		$this->block_level++;
 	}
 
 	public function close_block () {
 		if ( $this->block_level > 0 ) {
-			$this->raw .= '}' . $this->linebreak;
 			$this->block_level--;
+			$block_indentation = str_repeat( $this->options['indentation'], $this->block_level );
+			$this->raw .= $block_indentation . '}' . $this->linebreak;
 		}
 	}
 
