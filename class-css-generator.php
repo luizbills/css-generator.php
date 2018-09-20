@@ -3,7 +3,7 @@
  * CSS Generator
  * Write css programatically using PHP.
  *
- * @version 2.0.0
+ * @version 3.0.0
  * @author Luiz Bills <luizpbills@gmail.comm>
  * @copyright 2018 Luiz Bills
  * @license MIT
@@ -14,52 +14,43 @@ use MatthiasMullie\Minify;
 
 class CSS_Generator {
 
-	protected $output = '';
-	protected $linebreak = '';
-	protected $indentation = null;
-	protected $media_is_open = false;
-
-	protected $settings = null;
-	protected $default_settings = [
-		'indentation'  => "\t",
-		'linebreak'    => PHP_EOL,
+	protected $raw = '';
+	protected $block_level = 0;
+	protected $linebreak = "\n";
+	protected $options = null;
+	protected $default_options = [
+		'indentation'  => "    ", // 4 spaces
 	];
 
-	public function __construct ( $settings = [] ) {
-		$this->settings = array_merge( $this->default_settings, $settings );
+	public function __construct ( $options = [] ) {
+		$this->options = array_merge( $this->default_options, $options );
 	}
 
 	public function get_output ( $compress = false ) {
-		$this->close_media();
+		$this->close_blocks();
 
 		if ( $compress ) {
 			$this->minify();
 		}
 
-		return $this->output;
+		return $this->raw;
 	}
 
 	protected function minify () {
-		$minifier = new Minify\CSS( $this->output );
-		$this->output = $minifier->minify();
+		$minifier = new Minify\CSS( $this->raw );
+		$this->raw = $minifier->minify();
 	}
 
 	public function add_raw ( $string ) {
-		$this->output .= $string;
+		$this->raw .= $string;
 	}
 
 	public function add_rule ( $selectors, $declarations_array ) {
 		$declarations = [];
-		$selector_indentation = '';
-		$declaration_indentation = '';
-		$linebreak = $this->settings['indentation'];
-		$indentation = $this->settings['linebreak'];
-
-		if ( ! empty( $linebreak ) ) {
-			$selector_indentation = $this->media_is_open ? $indentation : '';
-			$declaration_indentation = $this->media_is_open ? str_repeat( $indentation, 2 ) : $indentation;
-		}
-
+		$indentation = $this->options['indentation'];
+		$selector_indentation = str_repeat( $indentation, $this->block_level );
+		$declaration_indentation = str_repeat( $indentation, $this->block_level + 1 );
+		
 		if ( ! is_array( $selectors ) ) {
 			$selectors = [ $selectors ];
 		}
@@ -69,28 +60,29 @@ class CSS_Generator {
 		}
 
 		foreach ( $declarations_array as $key => $value ) {
-			$declarations[] = $declaration_indentation . trim( $key ) . ':' . trim( $value ) . ';' . $linebreak;
+			$declarations[] = $declaration_indentation . trim( $key ) . ': ' . trim( $value ) . ';' . $this->linebreak;
 		}
 
-		$this->output .= implode( ',' . $linebreak, $selectors ) . '{' . $linebreak
-			. implode( false, $declarations )
-			. $selector_indentation . '}' . $linebreak;
+		$this->raw .= implode( ',' . $this->linebreak, $selectors ) . ' {';
+		$this->raw .= $this->linebreak . implode( '', $declarations );
+		$this->raw .= $selector_indentation . '}' . $this->linebreak;
 	}
 
-	public function open_media ( $breakpoint ) {
-		$this->close_media();
-		$this->media_is_open = true;
-		$this->output .= '@media ' . trim( $breakpoint ) . '{' . $this->settings['linebreak'];
+	public function open_block ( $type, $props = '' ) {
+		$this->raw .= '@' . "$type " . trim( $props ) . ' {' . $this->linebreak;
+		$this->block_level++;
 	}
 
-	public function close_media () {
-		if ( $this->media_is_open ) {
-			$this->media_is_open = false;
-			$this->output .= '}' . $this->settings['linebreak'];
+	public function close_block () {
+		if ( $this->block_level > 0 ) {
+			$this->raw .= '}' . $this->linebreak;
+			$this->block_level--;
 		}
 	}
 
-	public function reset () {
-		$this->output = '';
+	public function close_blocks () {
+		while ( $this->block_level > 0 ) {
+			$this->close_block();
+		}
 	}
 }
