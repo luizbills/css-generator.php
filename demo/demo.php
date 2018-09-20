@@ -2,12 +2,12 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use luizbills\CSS_Generator\Generator;
+use luizbills\CSS_Generator\Generator as CSS_Generator;
 
 $options = [
     'indentation' => '  ', // 2 spaces
 ];
-$css = new Generator( $options );
+$css = new CSS_Generator( $options );
 
 // single selector
 $css->add_rule( '.color-white', [ 'color' => '#fff' ] );
