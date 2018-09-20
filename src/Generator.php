@@ -8,10 +8,11 @@
  * @copyright 2018 Luiz Bills
  * @license MIT
 */
-require __DIR__ . '/vendor/autoload.php';
+namespace luizbills\CSS_Generator;
+
 use MatthiasMullie\Minify;
 
-class CSS_Generator {
+class Generator {
 	protected $raw = '';
 	protected $block_level = 0;
 	protected $linebreak = "\n";
@@ -47,7 +48,7 @@ class CSS_Generator {
 		$declarations = [];
 		$selector_indentation = str_repeat( $this->options['indentation'], $this->block_level );
 		$declaration_indentation = str_repeat( $this->options['indentation'], $this->block_level + 1 );
-		
+
 		if ( ! is_array( $selectors ) ) {
 			$selectors = [ $selectors ];
 		}
