@@ -16,6 +16,7 @@ class Generator {
 	protected $raw = '';
 	protected $block_level = 0;
 	protected $linebreak = "\n";
+	protected $minified = null; // for cache
 	protected $options = null;
 	protected $default_options = [
 		'indentation'  => '    ', // 4 spaces
@@ -27,21 +28,25 @@ class Generator {
 
 	public function get_output ( $compress = false ) {
 		$this->close_blocks();
-
 		if ( $compress ) {
-			$this->minify();
+			return $this->minify();
 		}
-
 		return $this->raw;
 	}
 
 	protected function minify () {
+		if ( ! is_null( $this->minified ) ) {
+			return $this->minified;
+		}
+
 		$minifier = new Minify\CSS( $this->raw );
-		$this->raw = $minifier->minify();
+		$this->minified = $minifier->minify();
+		return $this->minified;
 	}
 
 	public function add_raw ( $string ) {
 		$this->raw .= $string;
+		$this->clear_cache();
 	}
 
 	public function add_rule ( $selectors, $declarations_array ) {
@@ -64,12 +69,15 @@ class Generator {
 		$this->raw .= implode( ',' . $this->linebreak, $selectors ) . ' {';
 		$this->raw .= $this->linebreak . implode( '', $declarations );
 		$this->raw .= $selector_indentation . '}' . $this->linebreak;
+
+		$this->clear_cache();
 	}
 
 	public function open_block ( $type, $props = '' ) {
 		$block_indentation = str_repeat( $this->options['indentation'], $this->block_level );
 		$this->raw .= $block_indentation . '@' . $type . ' ' . trim( $props ) . ' {' . $this->linebreak;
 		$this->block_level++;
+		$this->clear_cache();
 	}
 
 	public function close_block () {
@@ -78,11 +86,17 @@ class Generator {
 			$block_indentation = str_repeat( $this->options['indentation'], $this->block_level );
 			$this->raw .= $block_indentation . '}' . $this->linebreak;
 		}
+		$this->clear_cache();
 	}
 
 	public function close_blocks () {
 		while ( $this->block_level > 0 ) {
 			$this->close_block();
 		}
+		$this->clear_cache();
+	}
+	
+	protected function clear_cache() {
+		$this->minified = null;
 	}
 }
