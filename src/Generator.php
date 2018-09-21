@@ -13,7 +13,7 @@ use MatthiasMullie\Minify;
 
 class Generator {
 	const VERSION = '3.1.0';
-	
+
 	protected $raw = '';
 	protected $block_level = 0;
 	protected $linebreak = "\n";
@@ -95,7 +95,7 @@ class Generator {
 			$this->close_block();
 		}
 	}
-	
+
 	protected function clear_cache() {
 		$this->minified = null;
 	}
