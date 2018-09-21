@@ -4,7 +4,7 @@ Write CSS programatically using PHP.
 
 ## Install
 
-```php
+```bash
 composer require luizbills/css-generator
 ```
 
