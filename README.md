@@ -1,6 +1,6 @@
 # CSS Generator
 
-Write css programatically using PHP.
+Write CSS programatically using PHP.
 
 ## Install
 
