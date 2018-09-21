@@ -86,15 +86,14 @@ class Generator {
 			$this->block_level--;
 			$block_indentation = str_repeat( $this->options['indentation'], $this->block_level );
 			$this->raw .= $block_indentation . '}' . $this->linebreak;
+			$this->clear_cache();
 		}
-		$this->clear_cache();
 	}
 
 	public function close_blocks () {
 		while ( $this->block_level > 0 ) {
 			$this->close_block();
 		}
-		$this->clear_cache();
 	}
 	
 	protected function clear_cache() {
