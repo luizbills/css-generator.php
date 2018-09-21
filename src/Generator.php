@@ -3,7 +3,6 @@
  * CSS Generator
  * Write css programatically using PHP.
  *
- * @version 3.0.0
  * @author Luiz Bills <luizpbills@gmail.comm>
  * @copyright 2018 Luiz Bills
  * @license MIT
@@ -13,6 +12,8 @@ namespace luizbills\CSS_Generator;
 use MatthiasMullie\Minify;
 
 class Generator {
+	const VERSION = '3.1.0';
+	
 	protected $raw = '';
 	protected $block_level = 0;
 	protected $linebreak = "\n";
