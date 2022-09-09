@@ -4,38 +4,58 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use luizbills\CSS_Generator\Generator as CSS_Generator;
 
-$options = [
-    'indentation' => '  ', // 2 spaces
-];
+$options = [];
 $css = new CSS_Generator( $options );
 
-// single selector
-$css->add_rule( '.color-white', [ 'color' => '#fff' ] );
+$css->root_variable( 'red', '#f00' );
 
-$css->open_block( 'media', 'screen and (min-width: 30em)' );
+$css->add_rule(
+    [
+        '.red',
+        '.col-red',
+        '.col_red',
+        '.c:red',
+        '.-red',
+        '.33',
+        '.❤️'
+    ],
+    [
+        'color' => 'var(--red)',
+        'font-weight' => 700,
+    ]
+);
 
-// multiple selectors
-$css->add_rule( [ 'html', 'body' ], [
-    'background-color' => 'black',
-    'color' => 'white'
-] );
+$css->open_block( 'media', 'screen' );
 
-$css->close_block(); // close a block
+$css->add_rule(
+    [
+        '.red',
+    ],
+    [
+        '--red' => 'blue'
+    ]
+);
 
-$css->open_block( 'supports', '(display: grid)' );
+// $css->close_block();
+?>
 
-$css->add_rule( '.grid', [
-    'display' => 'grid',
-] );
+<style>
+    pre {
+        border: 1px solid #ddd;
+        background-color: #eee;
+        padding: 1em;
+    }
+</style>
 
-// nested block
-$css->open_block( 'media', 'screen and (max-width: 30em)' );
+<style><?= $css->get_output( isset( $_GET['minify'] ) ); ?></style>
 
-$css->add_rule( '.grid-sm', [
-    'display' => 'grid',
-] );
+<pre><?= $css->get_output( true ); ?></pre>
+<pre><?= $css->get_output( false ); ?></pre>
 
-$css->close_blocks(); // close all blocks
-
-$minify = false;
-echo $css->get_output( $minify );
+<div class="col-red">.col-red</div>
+<div class="col_red">.col_red</div>
+<div class="red">.red</div>
+<div class="c:red">.c:red</div>
+<div class="-red">.-red</div>
+<div class="33">.33</div>
+<div class="❤️">.❤️</div>
