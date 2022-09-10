@@ -4,7 +4,7 @@
  * Write css programatically using PHP.
  *
  * @author Luiz Bills <luizpbills@gmail.comm>
- * @copyright 2018 Luiz Bills
+ * @copyright 2022 Luiz Bills
  * @license MIT
 */
 
