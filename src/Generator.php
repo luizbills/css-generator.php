@@ -126,7 +126,7 @@ class Generator {
 	 * @return $this
 	 */
 	public function root_variable ( $name, $value ) {
-		$this->variables[ '--' . self::esc_selector( $name ) ] = trim( $value );
+		$this->variables[ '--' . trim( $name ) ] = trim( $value );
 		$this->clear_cache();
 		return $this;
 	}
