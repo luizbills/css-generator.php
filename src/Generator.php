@@ -7,6 +7,7 @@
  * @copyright 2018 Luiz Bills
  * @license MIT
 */
+
 namespace luizbills\CSS_Generator;
 
 class Generator {
@@ -46,7 +47,7 @@ class Generator {
 
 	/**
 	 * @param string $string
-	 * @return Generator
+	 * @return $this
 	 */
 	public function add_raw ( $string ) {
 		$blocks[] = [
@@ -59,7 +60,7 @@ class Generator {
 
 	/**
 	 * @param string $string
-	 * @return Generator
+	 * @return $this
 	 */
 	public function add_comment ( $string ) {
 		$blocks[] = [
@@ -72,8 +73,8 @@ class Generator {
 
 	/**
 	 * @param string|string[] $selectors
-	 * @param string[] $selectors
-	 * @return Generator
+	 * @param string[] $declarations
+	 * @return $this
 	 */
 	public function add_rule ( $selectors, $declarations ) {
 		$selectors = ! is_array( $selectors ) ? [ $selectors ] : $selectors;
@@ -95,7 +96,7 @@ class Generator {
 	/**
 	 * @param string $name
 	 * @param string $props
-	 * @return Generator
+	 * @return $this
 	 */
 	public function open_block ( $name, $props = '' ) {
 		$this->blocks[] = [
@@ -109,7 +110,7 @@ class Generator {
 	}
 
 	/**
-	 * @return Generator
+	 * @return $this
 	 */
 	public function close_block () {
 		$this->blocks[] = [
@@ -122,7 +123,7 @@ class Generator {
 	/**
 	 * @param string $name
 	 * @param int|string value
-	 * @return Generator
+	 * @return $this
 	 */
 	public function root_variable ( $name, $value ) {
 		$this->variables[ '--' . self::esc_selector( $name ) ] = trim( $value );
