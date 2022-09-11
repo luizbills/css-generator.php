@@ -18,6 +18,4 @@ jobs:
           memory_limit: 1G
 
       - name: Unit Tests
-        with:
-          php_version: 7.4
-          command: composer run test
+        run: composer run test
