@@ -10,7 +10,7 @@ class EscTest extends \Codeception\Test\Unit {
     public function test () {
         $css = new CSS_Generator();
 
-        self::assertEquals($css->esc("\0"), "\u{FFFD}" );
+        self::assertEquals($css->esc("\0"), "\u{FFFD}xx" );
         self::assertEquals($css->esc("a\0"), "a\u{FFFD}" );
         self::assertEquals($css->esc("\0b"), "\u{FFFD}b" );
         self::assertEquals($css->esc("a\0b"), "a\u{FFFD}b" );
