@@ -1,0 +1,23 @@
+name: CI
+
+on: [push]
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v6
+
+      - name: PHPStan Static Analysis
+        uses: php-actions/phpstan@v3
+        with:
+          error_format: github
+          php_version: 7.4
+          php_extensions: opcache mbstring
+          memory_limit: 1G
+
+      # - name: Tests
+      #   with:
+      #     php_version: 7.4
+      #     command: composer run tests
