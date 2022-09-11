@@ -203,19 +203,30 @@ class Generator {
 	}
 
 	/**
-	 * Escapes a CSS rule selector. Based on https://github.com/mathiasbynens/CSS.escape
+	 * Alias for self::escape
 	 *
 	 * @param string $selector
 	 * @return string
 	 */
 	public function esc ( $selector ) {
+		return self::escape( $selector );
+	}
+
+	/**
+	 * Escapes a CSS rule selector. Based on https://github.com/mathiasbynens/CSS.escape
+	 *
+	 * @static
+	 * @param string $selector
+	 * @return string
+	 */
+	public static function escape ( $selector ) {
 		if ( '' === $selector ) return $selector;
 
 		$length = mb_strlen( $selector );
 		$result = '';
 		$index = -1;
 		$first_char = mb_substr( $selector, 0, 1 );
-		$first_char_code = mb_ord( $first_char );
+		$first_char_code = ord( $first_char );
 
 		if (
 			// If the character is the first character and is a `-` (U+002D), and
@@ -233,14 +244,14 @@ class Generator {
 			$char_code = ord( $char );
 
 			// If the character is NULL
-			if ( 0 === $char_code || 0xFFDD === $char_code ) {
+			if ( 0 === $char_code ) {
 				$result .= "\u{FFFD}";
 				continue;
 			}
 
 			if (
 				// If the character is in the range [\1-\1F] (U+0001 to U+001F) or is U+007F, […]
-				( $char_code >= 0x01 && $char_code <= 0x1F ) || 0x7F === $char_code ||
+				$char_code <= 0x1F || 0x7F === $char_code ||
 				// If the character is the first character and is in the range [0-9]
 				// (U+0030 to U+0039), […]
 				( 0 === $index && $char_code >= 0x30 && $char_code <= 0x39 ) ||
