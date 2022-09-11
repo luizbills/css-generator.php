@@ -126,29 +126,16 @@ class Generator {
 	 * Declares a CSS rule
 	 *
 	 * @param string|string[] $selectors
-	 * @param string[] $declarations
+	 * @param array<string, string|numeric-string> $declarations
 	 * @return $this
 	 */
 	public function add_rule ( $selectors, $declarations ) {
 		$selectors = ! is_array( $selectors ) ? [ $selectors ] : $selectors;
-		$block = [
+		$this->blocks[] = [
 			'type' => 'rule',
-			'selectors' => [],
+			'selectors' => $selectors,
 			'declarations' => $declarations,
 		];
-
-		foreach ( $selectors as $i => $selector ) {
-			$first_char = mb_substr( $selector, 0, 1 );
-			// do not escape . (dot) or # (number sign or hashtag)
-			if ( '.' === $first_char || '#' === $first_char ) {
-				$selector = mb_substr( $selector, 1 );
-			} else {
-				$first_char = '';
-			}
-			$block['selectors'][ $i ] = $first_char . self::esc_selector( $selector );
-		}
-		$this->blocks[] = $block;
-
 		$this->clear_cache();
 		return $this;
 	}
@@ -221,7 +208,7 @@ class Generator {
 	 * @param string $selector
 	 * @return string
 	 */
-	public static function esc_selector ( $selector ) {
+	public function esc ( $selector ) {
 		if ( '' === $selector ) return $selector;
 
 		$length = mb_strlen( $selector );
