@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  phpstan:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,7 +17,7 @@ jobs:
           php_extensions: opcache mbstring
           memory_limit: 1G
 
-      # - name: Tests
-      #   with:
-      #     php_version: 7.4
-      #     command: composer run tests
+      - name: Unit Tests
+        with:
+          php_version: 7.4
+          command: composer run test
