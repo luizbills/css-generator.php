@@ -80,5 +80,8 @@ class EscTest extends \Codeception\Test\Unit {
         // lone surrogates
         self::assertEquals($css->esc("\u{DF06}"), "\u{DF06}" );
         self::assertEquals($css->esc("\u{D834}"), "\u{D834}" );
+
+        // emojis
+        self::assertEquals($css->esc("😂👍❤️"), "😂👍❤️" );
     }
 }
