@@ -44,7 +44,7 @@ class RulesTest extends \Codeception\Test\Unit {
         ] );
 
         $css->add_rule( [ 'a', 'a:visited' ], [
-            'color' => 'violet',
+            'color' => 'var(--accent)',
             'text-decoration' => 'line-through'
         ] );
 
@@ -64,13 +64,18 @@ class RulesTest extends \Codeception\Test\Unit {
 
         $css->close_block();
 
+        $css->add_comment( 'Emoji' );
         $css->add_rule( '.'  . $css->esc( '❤️' ), [
             'color' => 'red',
         ] );
 
+        $css->add_comment( 'class 123' );
         $css->add_rule( '.'  . $css->esc( '123' ) . '::before  ', [
             'content' => '"123"',
         ] );
+
+        // should put root variables at top
+        $css->root_variable( 'accent', 'violet' );
 
         file_put_contents( __DIR__ . '/_generated.css', $css->get_output( false ) );
     }

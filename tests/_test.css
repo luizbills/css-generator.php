@@ -1,9 +1,13 @@
+:root {
+    --accent: violet;
+}
+
 body {
     margin: 0;
 }
 a,
 a:visited {
-    color: violet;
+    color: var(--accent);
     text-decoration: line-through;
 }
 @supports (display: grid) {
@@ -17,9 +21,11 @@ a:visited {
         color: rebeccapurple;
     }
 }
+/* Emoji */
 .❤️ {
     color: red;
 }
+/* class 123 */
 .\31 23::before {
     content: "123";
 }
