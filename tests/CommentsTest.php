@@ -30,7 +30,8 @@ class CommentsTest extends \Codeception\Test\Unit {
         $css->add_comment( 'a' );
         $css->add_comment( 'b' );
 
-        $expected = "/* a *//* b */";
+        // Should not output comments in minified format
+        $expected = "";
         $actual = $css->get_output( $compressed );
 
         self::assertEquals( $expected, $actual );

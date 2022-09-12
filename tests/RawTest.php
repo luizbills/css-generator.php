@@ -32,7 +32,7 @@ class RawTest extends \Codeception\Test\Unit {
         $css->add_comment( 'hi' );
         $css->add_raw( "xyz\n" );
 
-        $expected = "abc/* hi */xyz\n";
+        $expected = "abcxyz\n";
         $actual = $css->get_output( $compressed );
 
         self::assertEquals( $expected, $actual );

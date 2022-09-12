@@ -270,8 +270,10 @@ class Generator {
 		foreach ( $this->blocks as $block ) {
 			switch ( $block['type'] ) {
 				case 'comment':
-					$output .= $this->tab();
-					$output .= "/* {$block['comment']} */$br";
+					if ( ! $compressed ) {
+						$output .= $this->tab();
+						$output .= "/* {$block['comment']} */$br";
+					}
 					break;
 				case 'raw':
 					$output .= $block['raw'];
