@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+}
+a,
+a:visited {
+    color: violet;
+    text-decoration: line-through;
+}
+@supports (display: grid) {
+    .d\:grid {
+        display: grid;
+    }
+}
+@media print {
+    a,
+    a:visited {
+        color: rebeccapurple;
+    }
+}
+.❤️ {
+    color: red;
+}
+.\31 23::before {
+    content: "123";
+}

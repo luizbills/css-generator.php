@@ -126,7 +126,7 @@ class Generator {
 	 * Declares a CSS rule
 	 *
 	 * @param string|string[] $selectors
-	 * @param array<string, string|numeric-string> $declarations
+	 * @param array<string, string|numeric> $declarations
 	 * @return $this
 	 */
 	public function add_rule ( $selectors, $declarations ) {
@@ -278,11 +278,13 @@ class Generator {
 					break;
 				case 'rule':
 					$output .= $this->tab();
-					$output .= implode( ",$br", $block['selectors'] ) . $open;
+					$selectors = array_map( 'trim', $block['selectors'] );
+					$output .= implode( ",$br" . $this->tab(), $selectors );
+					$output .= $open;
 					$this->indent_level++;
 					foreach ( $block['declarations'] as $key => $value ) {
 						$output .= $this->tab();
-						$output .= "$key:$s$value;$br";
+						$output .= trim( $key ) . ":$s" . trim( $value ) . ";$br";
 					}
 					$this->indent_level--;
 					$output .= $this->tab() . $close;
