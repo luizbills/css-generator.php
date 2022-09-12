@@ -228,7 +228,6 @@ class Generator {
 	/**
 	 * Returns the current indentation (if not generating a minified code).
 	 *
-	 * @param int|null level
 	 * @return string
 	 */
 	protected function tab () {
