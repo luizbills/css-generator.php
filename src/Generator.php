@@ -148,7 +148,7 @@ class Generator {
 	 * @return $this
 	 */
 	public function root_variable ( $name, $value ) {
-		$this->variables[ '--' . trim( $name ) ] = trim( strval( $value ) );
+		$this->variables[ trim( $name ) ] = trim( strval( $value ) );
 		$this->clear_cache();
 		return $this;
 	}
@@ -261,7 +261,7 @@ class Generator {
 			$this->indent_level++;
 			foreach ( $this->variables as $name => $value ) {
 				$output .= $this->tab();
-				$output .= "$name:$s$value;$br";
+				$output .= "--$name:$s$value;$br";
 			}
 			$output .= $close . $br;
 			$this->indent_level--;
@@ -282,7 +282,7 @@ class Generator {
 					$this->indent_level++;
 					foreach ( $block['declarations'] as $key => $value ) {
 						$output .= $this->tab();
-						$output .= trim( $key ) . ":$s" . trim( $value ) . ";$br";
+						$output .= "$key:$s$value;$br";
 					}
 					$this->indent_level--;
 					$output .= $this->tab() . $close;
