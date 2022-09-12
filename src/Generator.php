@@ -275,7 +275,7 @@ class Generator {
 					$output .= "/* {$block['comment']} */$br";
 					break;
 				case 'raw':
-					$output .= $block['raw'] . $br;
+					$output .= $block['raw'];
 					break;
 				case 'rule':
 					$output .= $this->tab();
