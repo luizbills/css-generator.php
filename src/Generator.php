@@ -42,7 +42,7 @@ class Generator {
 	 *
 	 * @var int
 	 */
-	protected int $level = 0;
+	protected int $indent_level = 0;
 
 	/**
 	 * @var bool
@@ -70,7 +70,7 @@ class Generator {
 	 */
 	public function __construct ( $options = [] ) {
 		$default_options = [
-			'indent_size'  => 4,
+			'indent_size'  => 4, // only works with indent_style = space
 			'indent_style' => 'space', // or "tab"
 		];
 		$this->options = array_merge( $default_options, $options );
@@ -213,6 +213,107 @@ class Generator {
 	}
 
 	/**
+	 * Returns one unit of indentation
+	 *
+	 * @return string
+	 */
+	public function get_indent_unit () {
+		if ( 'space' === $this->options['indent_style'] ) {
+			$size = intval( $this->options['indent_size'] );
+			return str_repeat( ' ', max( $size, 2 ) );
+		}
+		return "\t";
+	}
+
+	/**
+	 * Returns the current indentation (if not generating a minified code).
+	 *
+	 * @param int|null level
+	 * @return string
+	 */
+	protected function tab () {
+		if ( ! $this->compress_output ) {
+			if ( $this->indent_level > 0 ) {
+				return str_repeat( $this->get_indent_unit(), $this->indent_level );
+			}
+		}
+		return '';
+	}
+
+	/**
+	 * Build the CSS code
+	 *
+	 * @param boolean $compressed
+	 * @return string
+	 */
+	protected function generate ( $compressed = false ) {
+		$this->indent_level = 0;
+		$this->compress_output = $compressed;
+
+		$br = $this->compress_output ? '' : "\n";
+		$s = $this->compress_output ? '' : ' ';
+		$open = $s . '{' . $br;
+		$close = '}' . $br;
+		$output = '';
+		$has_variables = count( $this->variables ) > 0;
+
+		if ( $has_variables ) {
+			$output .= ':root' . $open;
+			$this->indent_level++;
+			foreach ( $this->variables as $name => $value ) {
+				$output .= $this->tab();
+				$output .= "$name:$s$value;$br";
+			}
+			$output .= $close . $br;
+			$this->indent_level--;
+		}
+
+		foreach ( $this->blocks as $block ) {
+			switch ( $block['type'] ) {
+				case 'comment':
+					$output .= $this->tab();
+					$output .= "/* {$block['comment']} */$br";
+					break;
+				case 'raw':
+					$output .= $block['raw'] . $br;
+					break;
+				case 'rule':
+					$output .= $this->tab();
+					$output .= implode( ",$br", $block['selectors'] ) . $open;
+					$this->indent_level++;
+					foreach ( $block['declarations'] as $key => $value ) {
+						$output .= $this->tab();
+						$output .= trim( $key ) . ":$s" . trim( $value ) . ";$br";
+					}
+					$this->indent_level--;
+					$output .= $this->tab() . $close;
+					break;
+				case 'open':
+					$output .= $this->tab();
+					$output .= '@' . $block['name'];
+					$output .= '' !== $block['props'] ? " {$block['props']}" : '';
+					$output .= "$open";
+					$this->indent_level++;
+					break;
+				case 'close':
+					$this->indent_level--;
+					$output .= $this->tab() . $close;
+					break;
+				default:
+					break;
+			}
+		}
+
+		while ( $this->indent_level > 0 ) {
+			error_log( 'level = ' . $this->indent_level );
+			$this->indent_level--;
+			$output .= $this->tab() . $close;
+		}
+
+		return $output;
+	}
+
+	/**
 	 * Escapes a CSS rule selector. Based on https://github.com/mathiasbynens/CSS.escape
 	 *
 	 * @static
@@ -289,92 +390,5 @@ class Generator {
 		}
 
 		return $result;
-	}
-
-	/**
-	 * Build the CSS code
-	 *
-	 * @param boolean $compressed
-	 * @return string
-	 */
-	protected function generate ( $compressed = false ) {
-		$this->level = 0;
-		$this->compress_output = $compressed;
-
-		$br = $this->compress_output ? '' : "\n";
-		$s = $this->compress_output ? '' : ' ';
-		$open = $s . '{' . $br;
-		$close = '}' . $br;
-		$output = '';
-		$has_variables = count( $this->variables ) > 0;
-
-		if ( $has_variables ) {
-			$output .= ':root' . $open;
-			$this->level++;
-			foreach ( $this->variables as $name => $value ) {
-				$output .= $this->tab();
-				$output .= "$name:$s$value;$br";
-			}
-			$output .= $close . $br;
-			$this->level--;
-		}
-
-		foreach ( $this->blocks as $block ) {
-			switch ( $block['type'] ) {
-				case 'comment':
-					$output .= $this->tab();
-					$output .= "/* {$block['comment']} */$br";
-					break;
-				case 'raw':
-					$output .= $block['raw'] . $br;
-					break;
-				case 'rule':
-					$output .= $this->tab();
-					$output .= implode( ",$br", $block['selectors'] ) . $open;
-					$this->level++;
-					foreach ( $block['declarations'] as $key => $value ) {
-						$output .= $this->tab();
-						$output .= trim( $key ) . ":$s" . trim( $value ) . ";$br";
-					}
-					$this->level--;
-					$output .= $this->tab() . $close;
-					break;
-				case 'open':
-					$output .= $this->tab();
-					$output .= '@' . $block['name'];
-					$output .= '' !== $block['props'] ? " {$block['props']}" : '';
-					$output .= "$open";
-					$this->level++;
-					break;
-				case 'close':
-					$this->level--;
-					$output .= $this->tab() . $close;
-					break;
-				default:
-					break;
-			}
-		}
-
-		while ( $this->level > 0 ) {
-			error_log( 'level = ' . $this->level );
-			$this->level--;
-			$output .= $this->tab() . $close;
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Returns the current indentation (if not generating a minified code).
-	 *
-	 * @return string
-	 */
-	protected function tab () {
-		if ( ! $this->compress_output && $this->level > 0 ) {
-			$indent = 'tab' === $this->options['indent_style'] ? "\t" : ' ';
-			$size = intval( $this->options['indent_size'] );
-			return str_repeat( $indent, max( $size, 2 ) * $this->level );
-		}
-		return '';
 	}
 }
