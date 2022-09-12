@@ -54,8 +54,8 @@ a {
 }
 p,
 div {
-    margin: 13px,
-    padding: 9px
+    margin: 13px;
+    padding: 9px;
 }
 
 ```
@@ -79,7 +79,7 @@ Output:
 }
 
 a {
-    color: var(--color3)
+    color: var(--color3);
 }
 
 ```
