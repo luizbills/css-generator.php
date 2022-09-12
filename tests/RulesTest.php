@@ -40,7 +40,7 @@ class RulesTest extends \Codeception\Test\Unit {
      */
     protected function build_css ( $css ) {
         $css->add_rule( 'body', [
-            'margin' => 0,
+            'margin' => '50px',
         ] );
 
         $css->add_rule( [ 'a', 'a:visited' ], [
@@ -52,6 +52,7 @@ class RulesTest extends \Codeception\Test\Unit {
 
         $css->add_rule( '.'  . $css->esc( 'd:grid' ), [
             'display' => 'grid',
+            'grid-template-columns' => '200px 200px'
         ] );
 
         $css->close_block();
@@ -59,13 +60,13 @@ class RulesTest extends \Codeception\Test\Unit {
         $css->open_block( 'media', 'print' );
 
         $css->add_rule( [ 'a', 'a:visited' ], [
-            'color' => 'rebeccapurple',
+            'color' => 'blue',
         ] );
 
         $css->close_block();
 
-        $css->add_comment( 'Emoji' );
-        $css->add_rule( '.'  . $css->esc( '❤️' ), [
+        $css->add_comment( 'Emoji and symbols' );
+        $css->add_rule( '.'  . $css->esc( '❤️@★' ), [
             'color' => 'red',
         ] );
 

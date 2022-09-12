@@ -3,7 +3,7 @@
 }
 
 body {
-    margin: 0;
+    margin: 50px;
 }
 a,
 a:visited {
@@ -13,16 +13,17 @@ a:visited {
 @supports (display: grid) {
     .d\:grid {
         display: grid;
+        grid-template-columns: 200px 200px;
     }
 }
 @media print {
     a,
     a:visited {
-        color: rebeccapurple;
+        color: blue;
     }
 }
-/* Emoji */
-.❤️ {
+/* Emoji and symbols */
+.❤️\@★ {
     color: red;
 }
 /* class 123 */

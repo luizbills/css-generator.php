@@ -1,1 +1,1 @@
-:root{--accent:violet;}body{margin:0;}a,a:visited{color:var(--accent);text-decoration:line-through;}@supports (display: grid){.d\:grid{display:grid;}}@media print{a,a:visited{color:rebeccapurple;}}.❤️{color:red;}.\31 23::before{content:"123";}
+:root{--accent:violet;}body{margin:50px;}a,a:visited{color:var(--accent);text-decoration:line-through;}@supports (display: grid){.d\:grid{display:grid;grid-template-columns:200px 200px;}}@media print{a,a:visited{color:blue;}}.❤️\@★{color:red;}.\31 23::before{content:"123";}
