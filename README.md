@@ -14,6 +14,8 @@ composer require luizbills/css-generator
 ### Create a generator
 
 ```php
+require_once 'vendor/autoload.php';
+
 use luizbills\CSS_Generator\Generator as CSS_Generator;
 
 $options = [
